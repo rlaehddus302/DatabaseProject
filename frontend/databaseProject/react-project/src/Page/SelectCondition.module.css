@@ -1,0 +1,10 @@
+.select{
+    background-color: gray !important;
+}
+.unselect{
+    background-color: white !important;
+}
+
+.th{
+    font-size: 0.8em;
+}

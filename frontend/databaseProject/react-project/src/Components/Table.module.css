@@ -1,0 +1,103 @@
+
+.table
+{
+    border-collapse: collapse;
+    border: 1px solid black;
+    width: 60%;
+}
+.th{
+    width: 16.6%;
+    height: 50px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.cell{
+    border-top: 1px solid black;
+    height: 50px;
+    width: 100%;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 50px;
+}
+
+.session1{
+    background-color: rgb(242, 232, 232);
+    color: black;
+    text-align: center;
+}
+
+.session2{
+    background-color: rgb(255, 233, 233);
+    color: black;
+}
+
+.session3{
+    background-color: rgb(239, 249, 204);
+    color: black;
+}
+
+.session4{
+    background-color: rgb(220, 242, 233);
+    color: black;
+}
+
+.session5{
+    background-color: rgb(222, 232, 246);
+    color: black;
+}
+
+.session6{
+    background-color: rgb(255, 248, 204);
+    color: black;
+}
+
+.session7{
+    background-color: rgb(220, 238, 242);
+    color: black;
+}
+
+.session8{
+    background-color: rgb(158, 165, 167);
+    color: black;
+}
+
+.session9{
+    background-color: rgb(197, 202, 181);
+    color: black;
+}
+
+.session10{
+    background-color: rgb(185, 218, 222);
+    color: black;
+}
+
+.session11{
+    background-color: rgb(223, 255, 208);
+    color: black;
+}
+
+.session12{
+    background-color: rgb(205, 204, 255);
+    color: black;
+}
+
+.session13{
+    background-color: rgb(255, 204, 204);
+    color: black;
+}
+
+.session14{
+    background-color: rgb(251, 209, 255);
+    color: black;
+}
+
+.session15{
+    background-color: rgb(204, 255, 208);
+    color: black;
+}
+
+.session16{
+    background-color: rgb(204, 244, 255);
+    color: black;
+}

@@ -13,6 +13,7 @@ export default function Search({handleSelect})
                 console.log(query);
                 const response = await fetch('http://localhost:8080/courseSearch', {
                     method: 'POST',
+                    credentials: "include",
                     body: JSON.stringify(query),
                     headers: { 'Content-Type': 'application/json' }
                 });

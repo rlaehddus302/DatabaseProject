@@ -23,6 +23,9 @@ export default function Navbar()
                 <li className="nav-item mx-3">
                   <NavLink to="/generateTimeTalbe" className={({isActive}) => {return isActive ? "nav-link active" : "nav-link" }} aria-current="page">시간표</NavLink>
                 </li>
+                <li className="nav-item mx-3">
+                  <NavLink to="/login" className={({isActive}) => {return isActive ? "nav-link active" : "nav-link" }}>로그인</NavLink>
+                </li>
               </ul>
             </div>
           </div>

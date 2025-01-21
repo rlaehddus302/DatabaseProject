@@ -11,7 +11,9 @@ export default function TimeTalbe()
             let response
             try
             {
-                response = await fetch('http://localhost:8080/table')
+                response = await fetch('http://localhost:8080/table',{
+                    credentials: "include",
+                })
                 const resData = await response.json()
                 console.log(response)
                 console.log(resData)

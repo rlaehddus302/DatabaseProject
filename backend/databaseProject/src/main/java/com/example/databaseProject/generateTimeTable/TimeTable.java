@@ -23,6 +23,12 @@ public class TimeTable {
 	@Autowired
 	Caculator caculator;
 	
+	@PostMapping(path = "/basicOauth")
+	public String login()
+	{
+		return "Success";
+	}
+	
 	@GetMapping(path = "/course")
 	public List<Course> course()
 	{
@@ -44,8 +50,6 @@ public class TimeTable {
 	@PostMapping(path = "/SetCondition")
 	public void setFreePeriod(@RequestBody ReceivedValue value)
 	{
-		System.out.println(value.getConsecutiveClassTime());
-		System.out.println(value.getIntervalTime());
 		caculator.setFreePeriod(value.getFreePeriod());
 		caculator.setValue(value);
 	}

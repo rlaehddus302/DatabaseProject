@@ -20,6 +20,7 @@ export default function SelectSubject()
             console.log(JSON.stringify(courses))
             const response = await fetch('http://localhost:8080/caculate', {
                 method: 'POST',
+                credentials: "include",
                 body: JSON.stringify(courses),
                 headers: { 'Content-Type': 'application/json' }
             });
@@ -31,7 +32,9 @@ export default function SelectSubject()
             let response
             try
             {
-                response = await fetch('http://localhost:8080/course')
+                response = await fetch('http://localhost:8080/course',{
+                    credentials: "include",
+                })
                 const resData = await response.json()
                 setCourseList(resData)
             }

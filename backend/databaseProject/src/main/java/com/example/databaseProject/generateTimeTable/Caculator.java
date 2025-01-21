@@ -143,14 +143,16 @@ public class Caculator {
 					}
 				}
 			}
-			else if(check && intervalTime != 0)
+			if(check && intervalTime != 0)
 			{
+	        	logger.info("간격체크");
 				for(int i=0;i<5;i++)
 				{
 					Pattern pattern = Pattern.compile("1(0+)1");
 			        Matcher matcher = pattern.matcher(dayTable[week[i]].toString(2));
 			        List<String> list = new ArrayList<String>();
 			        while (matcher.find()) {
+			        	logger.info("나온 값입니다: "+matcher.group(1));
 			        	list.add(matcher.group(1)); 
 			        }
 			        if(list.stream().anyMatch(t -> {return t.length()>intervalTime*12;}))

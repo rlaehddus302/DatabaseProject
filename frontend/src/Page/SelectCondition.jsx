@@ -59,6 +59,7 @@ export default function SelectCondition()
             console.log(JSON.stringify(fetchData))
             const response = await fetch('http://localhost:8080/SetCondition', {
                 method: 'POST',
+                credentials: "include",
                 body: JSON.stringify(fetchData),
                 headers: { 'Content-Type': 'application/json' }
             });

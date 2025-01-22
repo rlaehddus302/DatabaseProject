@@ -1,8 +1,9 @@
-import { useRef } from "react"
-import { useNavigate } from "react-router-dom";
+import { useRef, useState } from "react"
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Login()
 {
+    const [loginSuccess, setLoginSucess] = useState(true);
     const navigate = useNavigate();
     const id = useRef(null);
     const passowrd = useRef(null);
@@ -19,11 +20,17 @@ export default function Login()
                 headers: { 'Authorization': baToken }
             });
             console.log(response)
+            if(response.status != 200)
+                {
+                    throw new Error("로그인 오류");
+                } 
+            localStorage.setItem("login","success");
             navigate("/")
         }
         catch(e)
         {
             console.log(e)
+            setLoginSucess(false)
         }
     }
     return(
@@ -43,7 +50,9 @@ export default function Login()
                         <input ref={passowrd} type="password" className="form-control" id="password"/>
                     </div>
                     <button onClick={move} type="button" className="mt-3 btn btn-dark w-100 text-center">로그인</button>
-                    <p className="text-center mt-4 mb-4">계정이 없으신가요? <a className="text-decoration-none">회원가입</a></p>
+                    {!loginSuccess && <p className="fs-6 text-danger"> 아이디 또는 비밀번호가 잘못 되었습니다. 
+                        아이디와 비밀번호를 정확히 입력해 주세요.</p>}
+                    <p className="text-center mt-4 mb-4">계정이 없으신가요? <Link to={"/signUp"} className="text-decoration-none">회원가입</Link></p>
                 </div>
             </section>
         </>

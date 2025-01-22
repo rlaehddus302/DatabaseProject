@@ -9,6 +9,8 @@ import SelectCondition from './Page/SelectCondition'
 import SelectSubject from './Page/SelectSubject'
 import TimeTalbe from './Page/TimeTable'
 import Login from './Page/Login'
+import Logout from './Page/Logout'
+import SignUp from './Page/SignUp'
 
 const router = createBrowserRouter([
  {path:'/', element:<Navbar/>, children:[
@@ -18,8 +20,9 @@ const router = createBrowserRouter([
     {path:'/generateTimeTalbe', element:<TimeTalbe/>},
   ]
  },
- {path:'/login', element:<Login/>,
- },
+ {path:'/login', element:<Login/>},
+ {path:'/logout', element:<Logout/>},
+ {path:'/signUp', element:<SignUp/>},
 ])
 
 function App() {

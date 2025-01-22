@@ -2,6 +2,20 @@ import { NavLink, Outlet } from "react-router-dom";
 
 export default function Navbar()
 {
+    const success =localStorage.getItem("login");
+    let navItem;
+    if(success == "success")
+    {
+      navItem = <li className="nav-item mx-3">
+                  <NavLink to="/logout" className={({isActive}) => {return isActive ? "nav-link active" : "nav-link" }}>로그아웃</NavLink>
+                </li>
+    }
+    else
+    {
+      navItem = <li className="nav-item mx-3">
+                  <NavLink to="/login" className={({isActive}) => {return isActive ? "nav-link active" : "nav-link" }}>로그인</NavLink>
+                </li>
+    }
     return(
       <>
         <nav className="navbar navbar-expand-md">
@@ -23,9 +37,7 @@ export default function Navbar()
                 <li className="nav-item mx-3">
                   <NavLink to="/generateTimeTalbe" className={({isActive}) => {return isActive ? "nav-link active" : "nav-link" }} aria-current="page">시간표</NavLink>
                 </li>
-                <li className="nav-item mx-3">
-                  <NavLink to="/login" className={({isActive}) => {return isActive ? "nav-link active" : "nav-link" }}>로그인</NavLink>
-                </li>
+                {navItem}
               </ul>
             </div>
           </div>

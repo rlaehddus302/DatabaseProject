@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import Table from "../Components/Table"
 import MyImage from '../assets/react.svg';
+import { useNavigate } from "react-router-dom";
 
 export default function TimeTalbe()
 {
     const [table, setTable] = useState([])
-
+    const navigate = useNavigate();
     useEffect(() => {
         async function fetchTable() {
             let response
@@ -24,6 +25,11 @@ export default function TimeTalbe()
                 console.error("실패")
                 console.error(e)
             }
+        }
+        const success =localStorage.getItem("login");
+        if(success != "success")
+        {
+            navigate("/login")
         }
         fetchTable()
     },[])

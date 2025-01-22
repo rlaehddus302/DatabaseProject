@@ -15,6 +15,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import jakarta.servlet.http.HttpServletResponse;
+
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
@@ -28,9 +30,17 @@ public class SecurityConfigure {
                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) // 필요한 경우 세션 생성
             )
 		.authorizeHttpRequests((requests) -> 
-		requests.anyRequest().authenticated());
+		requests.requestMatchers("/register","/error").permitAll()
+				.requestMatchers("/basicOauth",
+				"/caculate","/SetCondition","/table","/course","/exit","/courseSearch").authenticated());
 		http.formLogin(withDefaults());
-		http.httpBasic(withDefaults());
+        http.httpBasic(httpBasic -> httpBasic
+                .authenticationEntryPoint((request, response, authException) -> {
+                    // WWW-Authenticate 헤더를 제거하여 기본 로그인 창 비활성화
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.getWriter().write("Unauthorized"); // 커스텀 메시지 반환
+                })
+            );
 		return http.build();
 	}
 	
@@ -46,4 +56,10 @@ public class SecurityConfigure {
         return source;
     }
 	
+    @Bean
+    public PasswordEncoder passwordEncoder()
+    {
+    	return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
+    
 }

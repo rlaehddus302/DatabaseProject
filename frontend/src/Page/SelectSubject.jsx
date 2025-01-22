@@ -44,6 +44,11 @@ export default function SelectSubject()
                 console.error(e)
             }
         }
+        const success =localStorage.getItem("login");
+        if(success != "success")
+            {
+                navigate("/login")
+            }
         fetchCourse()
     },[])
     let name = [...selectList]

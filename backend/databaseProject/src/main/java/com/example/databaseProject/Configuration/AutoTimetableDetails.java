@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.databaseProject.Information.Customer;
@@ -27,7 +28,7 @@ public class AutoTimetableDetails implements UserDetailsService {
 		Customer customer = customerRepository.findById(username).orElseThrow(() -> new UsernameNotFoundException(
 				username + "is not exist"));
 		List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_USER"));
-		User user = new User(username, "{noop}"+customer.getPassword(), authorities);
+		User user = new User(username,customer.getPassword(), authorities);
 		return user;
 	}
 	

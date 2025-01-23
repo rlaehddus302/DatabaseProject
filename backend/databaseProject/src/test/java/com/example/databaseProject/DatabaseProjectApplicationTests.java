@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.example.databaseProject.Information.ClassTimeAndLocation;
 import com.example.databaseProject.Information.Course;
 import com.example.databaseProject.Information.CourseRepositery;
+import com.example.databaseProject.Information.CustomerRepository;
 import com.example.databaseProject.Information.Session;
 import com.example.databaseProject.TDO.ReturnInfo;
 import com.example.databaseProject.generateTimeTable.Caculator;
@@ -23,5 +24,7 @@ import jakarta.transaction.Transactional;
 @SpringBootTest
 class DatabaseProjectApplicationTests {
 	
+	@Autowired
+	CustomerRepository customerRepository;
 
 }

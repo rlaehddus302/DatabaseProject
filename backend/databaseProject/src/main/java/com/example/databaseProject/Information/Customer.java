@@ -15,7 +15,7 @@ public class Customer {
     public Customer() {
     }
 	
-	public Customer(String id, int studentNumber, String password, String name) {
+	public Customer(String id, long studentNumber, String password, String name) {
 		this.id = id;
 		this.studentNumber = studentNumber;
 		this.password = password;

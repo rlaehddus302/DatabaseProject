@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,6 +32,8 @@ public class TimeTable {
 	Caculator caculator;
 	@Autowired
 	CustomerRepository customerRepository;
+	@Autowired
+	PasswordEncoder passwordEncoder;
 	
 	@PostMapping(path = "/basicOauth")
 	public String login()
@@ -71,10 +74,24 @@ public class TimeTable {
 	@PostMapping(path = "/register")
 	public ResponseEntity<String> signUp(@RequestBody Customer customer)
 	{
-		customerRepository.save(customer);
+		String encodedPassword = passwordEncoder.encode(customer.getPassword());
+		Customer newCustomer = new Customer(customer.getId(), customer.getStudentNumber(), encodedPassword, customer.getName());
+		customerRepository.save(newCustomer);
 		return ResponseEntity.status(HttpStatus.CREATED).body("create success");
 	}
-	
+	@PostMapping(path = "/idDuplicate")
+	public ResponseEntity<String> checkIdDuplicate(@RequestBody String id)
+	{
+		Optional<Customer> exist = customerRepository.findById(id);
+		if(exist.isPresent())
+		{
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("already exist");
+		}
+		else
+		{
+			return ResponseEntity.ok("ok");
+		}
+	}
 	@GetMapping(path = "/table")
 	public ArrayList<ArrayList<ReturnInfo>> Table()
 	{

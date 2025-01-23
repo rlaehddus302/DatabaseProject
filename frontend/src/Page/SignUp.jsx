@@ -3,35 +3,74 @@ import { Link, useNavigate } from "react-router-dom";
 
 export default function SignUp()
 {
-    const [checkMessage, setCheckMessage] = useState(true);
-    const [duplicate,setDuplicate] = useState(false);
+    const [checkMessage, setCheckMessage] = useState(false);
+    const [valid,setValid] = useState(false);
+    const [exist,setExist] = useState(null);
     const navigate = useNavigate();
     const name = useRef(null);
     const studentNumber = useRef(null);
     const id = useRef(null);
     const password = useRef(null);
     const passwordConfig = useRef(null);
+    let content=""
+    if(exist == null )
+    {
+        content="";
+    }
+    else if(exist)
+    {
+        content = <p className="fs-6 text-danger">이미 존재하는 아이디입니다.</p>
+    }
+    else
+    {
+        content = <p className="fs-6 text-success">사용 가능한 아이디입니다.</p>;
+    }
     function check()
     {
         if(passwordConfig.current.value == "")
         {
-            setCheckMessage(true);
+            setCheckMessage(false);
         }
         else if(password.current.value != passwordConfig.current.value)
         {
-            setCheckMessage(false);
-            setDuplicate(false);
+            setCheckMessage(true);
+            setValid(false);
         }
         else
         {
-            setCheckMessage(true);
-            setDuplicate(true);
+            setCheckMessage(false);
+            setValid(true);
         }
+    }
+    async function idDuplicate()
+    {
+        let data = id.current.value;
+        try
+            {
+                const response = await fetch('http://localhost:8080/idDuplicate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'text/plain', 
+                      },
+                    body: data,
+                });
+                console.log(response)
+                if(!response.ok)
+                {
+                    throw new Error("생성 중 오류 발생");
+                } 
+                setExist(false);
+            }
+            catch(e)
+            {
+                console.log(e)
+                setExist(true);
+            }
     }
     async function move(event)
     {
         event.preventDefault();
-        if(duplicate)
+        if(valid)
         {
             let body = {
                 "studentNumber" :  studentNumber.current.value,
@@ -46,7 +85,7 @@ export default function SignUp()
                 const response = await fetch('http://localhost:8080/register', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json', // JSON 형식임을 명시
+                        'Content-Type': 'application/json', 
                     },
                     body: data,
                 });
@@ -80,8 +119,14 @@ export default function SignUp()
                         </div>
                         <div class="mb-2">
                             <label htmlFor="id" className="form-label">아이디</label>
-                            <input required ref={id} type="text" className="form-control" id="id"/>
+                            <div className="row w-100">
+                                <div className="col-9">
+                                    <input required ref={id} type="text" className="form-control" id="id"/>
+                                </div>
+                                <button onClick={idDuplicate} type="button" className="btn btn-primary col">중복확인</button>
+                            </div>
                         </div>
+                        {content}
                         <div class="mb-2">
                             <label htmlFor="password" className="form-label">비밀번호</label>
                             <input required onChange={check} ref={password} type="password" className="form-control" id="password"/>
@@ -90,11 +135,11 @@ export default function SignUp()
                             <label htmlFor="passwordConfig" className="form-label">비밀번호 확인</label>
                             <input required onChange={check} ref={passwordConfig} type="password" className="form-control" id="passwordConfig"/>
                         </div>
-                        {!checkMessage && <p className="fs-6 text-danger">비밀번호가 일치하지 않습니다.</p>}
+                        {checkMessage && <p className="fs-6 text-danger">비밀번호가 일치하지 않습니다.</p>}
                         <p></p>
-                        <button className="mt-3 btn btn-dark w-100 text-center">로그인</button>
+                        <button className="mt-3 btn btn-dark w-100 text-center">등록</button>
                     </form>
-                    <p className="text-center mt-4 mb-4">계정이 있으신가요? <Link to={"/login"} className="text-decoration-none">회원가입</Link></p>
+                    <p className="text-center mt-4 mb-4">계정이 있으신가요? <Link to={"/login"} className="text-decoration-none">로그인</Link></p>
                 </div>
             </section>
         </>

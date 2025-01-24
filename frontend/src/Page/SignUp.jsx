@@ -3,16 +3,21 @@ import { Link, useNavigate } from "react-router-dom";
 
 export default function SignUp()
 {
+    const [valid,setValid] = useState({
+        "id" : false,
+        "password" : false,
+        "studentNumber" : false,
+    });
     const [checkMessage, setCheckMessage] = useState(false);
-    const [valid,setValid] = useState(false);
     const [exist,setExist] = useState(null);
+    const [studentNumberText,setStudentNumberText] = useState(null);
     const navigate = useNavigate();
     const name = useRef(null);
     const studentNumber = useRef(null);
     const id = useRef(null);
     const password = useRef(null);
     const passwordConfig = useRef(null);
-    let content=""
+    let content
     if(exist == null )
     {
         content="";
@@ -25,7 +30,31 @@ export default function SignUp()
     {
         content = <p className="fs-6 text-success">사용 가능한 아이디입니다.</p>;
     }
-    function check()
+    function studentNumberCheck(e)
+    {
+        const regex = /^\d{10}$/;
+        if(regex.test(e.target.value))
+        {
+            setStudentNumberText(<p className="fs-6 text-success">유효한 형식입니다</p>); 
+            setValid((prev)=>{
+                let copy = { ...prev,
+                            "studentNumber" : true,
+                        }
+                return copy
+            })   
+        }
+        else
+        {
+            setStudentNumberText(<p className="fs-6 text-danger">유효하지 않은 형식입니다</p>);   
+            setValid((prev)=>{
+                let copy = { ...prev,
+                            "studentNumber" : false,
+                        }
+                return copy
+            }) 
+        }
+    }
+    function passowrdCheck()
     {
         if(passwordConfig.current.value == "")
         {
@@ -33,13 +62,23 @@ export default function SignUp()
         }
         else if(password.current.value != passwordConfig.current.value)
         {
-            setCheckMessage(true);
-            setValid(false);
+            setCheckMessage(true);    
+            setValid((prev)=>{
+                let copy = { ...prev,
+                            "id" : false,
+                        }
+                return copy
+            })      
         }
         else
         {
             setCheckMessage(false);
-            setValid(true);
+            setValid((prev)=>{
+                let copy = { ...prev,
+                            "id" : true,
+                        }
+                return copy
+            })        
         }
     }
     async function idDuplicate()
@@ -60,17 +99,29 @@ export default function SignUp()
                     throw new Error("생성 중 오류 발생");
                 } 
                 setExist(false);
+                setValid((prev)=>{
+                    let copy = { ...prev,
+                                "password" : true,
+                            }
+                    return copy
+                })
             }
             catch(e)
             {
                 console.log(e)
                 setExist(true);
+                setValid((prev)=>{
+                    let copy = { ...prev,
+                                "id" : false,
+                            }
+                    return copy
+                }) 
             }
     }
     async function move(event)
     {
         event.preventDefault();
-        if(valid)
+        if(valid.id && valid.password && valid.studentNumber) 
         {
             let body = {
                 "studentNumber" :  studentNumber.current.value,
@@ -115,7 +166,8 @@ export default function SignUp()
                         </div>
                         <div class="mb-2">
                             <label htmlFor="studentNumber" className="form-label">학번</label>
-                            <input required ref={studentNumber} type="text" className="form-control" id="studentNumber"/>
+                            <input required onBlur={(event) => studentNumberCheck(event)} ref={studentNumber} type="text" className="form-control" id="studentNumber"/>
+                            {studentNumberText}
                         </div>
                         <div class="mb-2">
                             <label htmlFor="id" className="form-label">아이디</label>
@@ -129,11 +181,11 @@ export default function SignUp()
                         {content}
                         <div class="mb-2">
                             <label htmlFor="password" className="form-label">비밀번호</label>
-                            <input required onChange={check} ref={password} type="password" className="form-control" id="password"/>
+                            <input required onChange={passowrdCheck} ref={password} type="password" className="form-control" id="password"/>
                         </div>
                         <div class="mb-2">
                             <label htmlFor="passwordConfig" className="form-label">비밀번호 확인</label>
-                            <input required onChange={check} ref={passwordConfig} type="password" className="form-control" id="passwordConfig"/>
+                            <input required onChange={passowrdCheck} ref={passwordConfig} type="password" className="form-control" id="passwordConfig"/>
                         </div>
                         {checkMessage && <p className="fs-6 text-danger">비밀번호가 일치하지 않습니다.</p>}
                         <p></p>

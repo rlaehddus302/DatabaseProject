@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 export default function TimeTalbe()
 {
     const [table, setTable] = useState([])
+    const [loading,setLoading] = useState(false)
     const navigate = useNavigate();
     useEffect(() => {
         async function fetchTable() {
@@ -34,29 +35,33 @@ export default function TimeTalbe()
         fetchTable()
     },[])
     return(
-        <div className="h-75">
-            <div id="carouselExample" className="carousel slide" data-bs-theme="dark">
-                <div class="carousel-indicators">
-                    {table.map((value,index) => { return(
-                        <button type="button" data-bs-target="#carouselExample" data-bs-slide-to={`${index}`} className={index==0 ? "active" : null} aria-current={index==0 ? "true" : null} aria-label={`Slide ${index+1}`} ></button>
-                    )})}
-                </div>
-                <div className="carousel-inner">
-                    {table.map((value,index) => { return(
-                        <div className={index==0 ? "carousel-item active" : "carousel-item"}>
-                            <Table prop={value}></Table>
+        <>
+            {loading && 
+                    <div className="h-75">
+                        <div id="carouselExample" className="carousel slide" data-bs-theme="dark">
+                            <div class="carousel-indicators">
+                                {table.map((value,index) => { return(
+                                    <button type="button" data-bs-target="#carouselExample" data-bs-slide-to={`${index}`} className={index==0 ? "active" : null} aria-current={index==0 ? "true" : null} aria-label={`Slide ${index+1}`} ></button>
+                                )})}
+                            </div>
+                            <div className="carousel-inner">
+                                {table.map((value,index) => { return(
+                                    <div className={index==0 ? "carousel-item active" : "carousel-item"}>
+                                        <Table prop={value}></Table>
+                                    </div>
+                                )})}
+                            </div>
+                            <button className="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                                <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span className="visually-hidden">Previous</span>
+                            </button>
+                            <button className="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                                <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span className="visually-hidden">Next</span>
+                            </button>
                         </div>
-                    )})}
-                </div>
-                <button className="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
-                    <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span className="visually-hidden">Previous</span>
-                </button>
-                <button className="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
-                    <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span className="visually-hidden">Next</span>
-                </button>
-            </div>
-        </div>
+                    </div>
+            }
+        </>
     )
 }

@@ -16,6 +16,9 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import com.example.databaseProject.ExceptionHandle.CustomAccessDeniedHandler;
+import com.example.databaseProject.ExceptionHandle.CustomAuthenticationEntryPoint;
+
 import jakarta.servlet.http.HttpServletResponse;
 
 import static org.springframework.security.config.Customizer.withDefaults;
@@ -28,7 +31,7 @@ public class SecurityConfigure {
 		http.csrf(t -> t.disable())
 		.cors(cors -> cors.configurationSource(corsConfigurationSource()))
         .sessionManagement(session -> session
-                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) // 필요한 경우 세션 생성
+                .sessionCreationPolicy(SessionCreationPolicy.ALWAYS) 
             )
 		.authorizeHttpRequests((requests) -> 
 		requests.requestMatchers("/register","/error","/idDuplicate").permitAll()
@@ -36,12 +39,10 @@ public class SecurityConfigure {
 				"/caculate","/SetCondition","/table","/course","/exit","/courseSearch").authenticated());
 		http.formLogin(withDefaults());
         http.httpBasic(httpBasic -> httpBasic
-                .authenticationEntryPoint((request, response, authException) -> {
-                    // WWW-Authenticate 헤더를 제거하여 기본 로그인 창 비활성화
-                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                    response.getWriter().write("Unauthorized"); // 커스텀 메시지 반환
-                })
+                .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
             );
+        http.exceptionHandling(t -> t.authenticationEntryPoint(new CustomAuthenticationEntryPoint()));
+        http.exceptionHandling(t -> t.accessDeniedHandler(new CustomAccessDeniedHandler()));
 		return http.build();
 	}
 	

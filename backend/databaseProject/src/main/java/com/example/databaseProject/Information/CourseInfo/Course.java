@@ -1,4 +1,4 @@
-package com.example.databaseProject.Information;
+package com.example.databaseProject.Information.CourseInfo;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -20,8 +20,7 @@ export default function Table(prop)
         };
     },[])
     return(
-        <div>
-            <div className="d-flex justify-content-center">
+        <>
                 <table className={`mb-1 ${styles.table}`} data-bs-theme="light" >
                     <thead>
                         <tr>
@@ -101,12 +100,6 @@ export default function Table(prop)
                         </tr>
                     </tbody>
                 </table>
-            </div> 
-            <div className='d-flex justify-content-center mb-5'>
-                <div className='d-flex' style={{width: "60%"}}>
-                    <button type="button" className="ms-auto btn btn-dark">Dark</button>
-                </div>
-            </div>
-        </div>
+        </>
     )
 }

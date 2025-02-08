@@ -1,4 +1,4 @@
-package com.example.databaseProject.Information;
+package com.example.databaseProject.Information.CustomerInfo;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.JpaRepository;

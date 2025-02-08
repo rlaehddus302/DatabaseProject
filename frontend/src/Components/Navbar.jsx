@@ -6,9 +6,14 @@ export default function Navbar()
     let navItem;
     if(success == "success")
     {
-      navItem = <li className="nav-item mx-3">
-                  <NavLink to="/logout" className={({isActive}) => {return isActive ? "nav-link active" : "nav-link" }}>로그아웃</NavLink>
-                </li>
+      navItem = <>
+                  <li className="nav-item mx-3">
+                    <NavLink to="/myTable" className={({isActive}) => {return isActive ? "nav-link active" : "nav-link" }}>내 시간표</NavLink>
+                  </li>
+                  <li className="nav-item mx-3">
+                    <NavLink to="/logout" className={({isActive}) => {return isActive ? "nav-link active" : "nav-link" }}>로그아웃</NavLink>
+                  </li>
+                </> 
     }
     else
     {

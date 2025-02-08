@@ -3,7 +3,7 @@ package com.example.databaseProject.TDO;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.databaseProject.Information.Session;
+import com.example.databaseProject.Information.CourseInfo.Session;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class ReturnInfo {

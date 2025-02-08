@@ -42,7 +42,7 @@ export default function Login()
                         시간표 생성을 위해 로그인 해 주세요
                     </p>
                     <div class="mb-2">
-                        <label htmlFor="id" className="form-label">학번</label>
+                        <label htmlFor="id" className="form-label">아이디</label>
                         <input ref={id} type="text" className="form-control" id="id"/>
                     </div>
                     <div class="mb-2">

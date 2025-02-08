@@ -1,4 +1,4 @@
-package com.example.databaseProject.Information;
+package com.example.databaseProject.Information.CourseInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,6 @@ import jakarta.persistence.OneToMany;
 @Entity
 public class Session {
 	
-	private String professor;
 	@Id
 	private String courseID;
 	
@@ -29,6 +28,8 @@ public class Session {
 	private List<ClassTimeAndLocation> classTimeAndLocation = new ArrayList<ClassTimeAndLocation>();
 	
 	private String remarks;
+	
+	private String professor;
 	
 	public String getRemarks() {
 		return remarks;

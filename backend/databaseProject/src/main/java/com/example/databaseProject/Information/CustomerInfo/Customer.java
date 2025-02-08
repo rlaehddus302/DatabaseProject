@@ -1,7 +1,10 @@
-package com.example.databaseProject.Information;
+package com.example.databaseProject.Information.CustomerInfo;
+
+import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Customer {
@@ -12,9 +15,16 @@ public class Customer {
 	private String password;
 	private String name;
 	
+	@OneToMany(mappedBy = "customer")
+	private List<MyTimeTableName> tableNames;
+	
     public Customer() {
     }
 	
+	public List<MyTimeTableName> getTableNames() {
+		return tableNames;
+	}
+
 	public Customer(String id, long studentNumber, String password, String name) {
 		this.id = id;
 		this.studentNumber = studentNumber;

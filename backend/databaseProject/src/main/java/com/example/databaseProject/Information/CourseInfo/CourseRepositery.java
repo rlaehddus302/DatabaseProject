@@ -1,4 +1,4 @@
-package com.example.databaseProject.Information;
+package com.example.databaseProject.Information.CourseInfo;
 
 import java.util.List;
 import java.util.Optional;

@@ -2,38 +2,56 @@ package com.example.databaseProject.generateTimeTable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.databaseProject.Information.Course;
-import com.example.databaseProject.Information.CourseRepositery;
-import com.example.databaseProject.Information.Customer;
-import com.example.databaseProject.Information.CustomerRepository;
+import com.example.databaseProject.Information.CourseInfo.Course;
+import com.example.databaseProject.Information.CourseInfo.CourseRepositery;
+import com.example.databaseProject.Information.CourseInfo.Session;
+import com.example.databaseProject.Information.CustomerInfo.Customer;
+import com.example.databaseProject.Information.CustomerInfo.CustomerRepository;
+import com.example.databaseProject.Information.CustomerInfo.MyTimeTableName;
+import com.example.databaseProject.Information.CustomerInfo.MyTimeTableNameRepository;
+import com.example.databaseProject.Information.CustomerInfo.MyTimeTableSession;
+import com.example.databaseProject.Information.CustomerInfo.MyTimeTableSessionRepository;
+import com.example.databaseProject.TDO.MyTable;
 import com.example.databaseProject.TDO.ReceivedValue;
 import com.example.databaseProject.TDO.ReturnInfo;
+import com.example.databaseProject.TDO.StoreMyTimeTableForm;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 
 @RestController
 public class TimeTable {
 	@Autowired
 	CourseRepositery courseRepository;
 	@Autowired
-	Caculator caculator;
+	CaculatorService caculator;
 	@Autowired
 	CustomerRepository customerRepository;
 	@Autowired
 	PasswordEncoder passwordEncoder;
+	@Autowired
+	MyTimeTableSessionRepository myTimeTableSessionRepository;
+	@Autowired
+	MyTimeTableNameRepository myTimeTableNameRepository;
 	
 	@PostMapping(path = "/basicOauth")
 	public String login()
@@ -97,5 +115,68 @@ public class TimeTable {
 	{
 		ArrayList<ArrayList<ReturnInfo>> tables = caculator.generateTable();
 		return tables;
+	}
+	
+	@PostMapping(path = "/storeMyTimeTable")
+	public ResponseEntity<String> storeMyTimeTable(@RequestBody StoreMyTimeTableForm data,@AuthenticationPrincipal UserDetails userDetails)
+			throws UsernameNotFoundException
+	{
+		String userId = userDetails.getUsername();
+		Optional<Customer> customer = customerRepository.findById(userId);
+		String tableName = data.getTableName();
+		if(myTimeTableNameRepository.findById(tableName).isPresent())
+		{
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Already Exist");
+		}
+		MyTimeTableName myTimeTableName = new MyTimeTableName(tableName,customer.get());
+		myTimeTableNameRepository.save(myTimeTableName);
+		ArrayList<ReturnInfo> body = data.getBody();
+		body.stream().forEach(t -> {
+			Session session = t.getSession();
+			MyTimeTableSession myTimeTableSession = new MyTimeTableSession(session, myTimeTableName);
+			myTimeTableSessionRepository.save(myTimeTableSession);
+		});
+		return ResponseEntity.status(HttpStatus.CREATED).body("Created Success");
+	}
+	
+	@GetMapping(path = "/myTable")
+	public ArrayList<MyTable> myTable(@AuthenticationPrincipal UserDetails userDetails)
+	{
+		ArrayList<MyTable> myTables = new ArrayList<MyTable>();
+		String id = userDetails.getUsername();
+		Customer customer = customerRepository.findById(id).get();
+		List<MyTimeTableName> tableNames = customer.getTableNames();
+		tableNames.stream().forEach(tableName -> {
+			List<MyTimeTableSession> mySessions = tableName.getSessions();
+			ArrayList<ReturnInfo> returnInfoes = new ArrayList<ReturnInfo>();
+			mySessions.stream().forEach(mySession -> {
+				Session session = mySession.getSession();
+				ReturnInfo returnInfo = caculator.makeReturnInfo(session);
+				returnInfoes.add(returnInfo);
+			});
+			MyTable myTable = new MyTable(tableName.getName(), returnInfoes);
+			myTables.add(myTable);
+		});
+		return myTables;
+	}
+	
+	@PatchMapping(path = "/updateName")
+	@Transactional
+	public ResponseEntity<String> updateName(@RequestBody Map<String, String> requestData)
+	{
+		String oldName = requestData.get("oldName");
+	    String newName = requestData.get("newName");
+	    MyTimeTableName myTable = myTimeTableNameRepository.findById(oldName).get();
+	    MyTimeTableName changeName = new MyTimeTableName(newName, myTable.getCustomer());
+	    myTimeTableNameRepository.save(changeName);
+	    myTimeTableSessionRepository.updateTableNameByName(oldName, newName);
+	    myTimeTableNameRepository.deleteById(oldName);
+		return ResponseEntity.status(HttpStatus.CREATED).body("created success");
+	}
+	
+	@DeleteMapping(path = "/deleteTable")
+	public void deleteTable(@RequestBody String name)
+	{
+		myTimeTableNameRepository.deleteById(name);
 	}
 }

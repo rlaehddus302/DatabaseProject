@@ -11,6 +11,7 @@ import TimeTalbe from './Page/TimeTable'
 import Login from './Page/Login'
 import Logout from './Page/Logout'
 import SignUp from './Page/SignUp'
+import MyTable from './Page/MyTable'
 
 const router = createBrowserRouter([
  {path:'/', element:<Navbar/>, children:[
@@ -18,6 +19,7 @@ const router = createBrowserRouter([
     {path:'/conditionSelect', element:<SelectCondition/>},
     {path:'/selectSubject', element:<SelectSubject/>},
     {path:'/generateTimeTalbe', element:<TimeTalbe/>},
+    {path:'/myTable', element:<MyTable/>},
   ]
  },
  {path:'/login', element:<Login/>},

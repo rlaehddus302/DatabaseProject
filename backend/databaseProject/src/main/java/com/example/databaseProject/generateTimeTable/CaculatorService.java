@@ -2,10 +2,11 @@ package com.example.databaseProject.generateTimeTable;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.example.databaseProject.Information.ClassTimeAndLocation;
-import com.example.databaseProject.Information.Course;
-import com.example.databaseProject.Information.CourseRepositery;
-import com.example.databaseProject.Information.Session;
+
+import com.example.databaseProject.Information.CourseInfo.ClassTimeAndLocation;
+import com.example.databaseProject.Information.CourseInfo.Course;
+import com.example.databaseProject.Information.CourseInfo.CourseRepositery;
+import com.example.databaseProject.Information.CourseInfo.Session;
 import com.example.databaseProject.TDO.ReceivedValue;
 import com.example.databaseProject.TDO.ReturnInfo;
 import com.example.databaseProject.TDO.TimeBitmask;
@@ -21,14 +22,14 @@ import java.util.regex.*;
 
 
 @Service
-public class Caculator {
+public class CaculatorService {
 	@Autowired
 	private CourseRepositery courseRepository;
 	private String[] courses = {};
 	private ArrayList<ArrayList<ReturnInfo>> timeTable;
 	private TimeBitmask[] freePeriod = new TimeBitmask[5];
 	private ReceivedValue value;
-	private static final Logger logger = LoggerFactory.getLogger(Caculator.class);
+	private static final Logger logger = LoggerFactory.getLogger(CaculatorService.class);
 	
 	public void setValue(ReceivedValue value) {
 		this.value = value;
@@ -216,7 +217,7 @@ public class Caculator {
 		
 	}
 	
-	private ReturnInfo makeReturnInfo(Session session)
+	public ReturnInfo makeReturnInfo(Session session)
 	{
 		List<ClassTimeAndLocation> TNL = session.getClassTimeAndLocation();
 		ReturnInfo returnInfo = new ReturnInfo();

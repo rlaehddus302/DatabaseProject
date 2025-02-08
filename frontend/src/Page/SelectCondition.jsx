@@ -81,8 +81,8 @@ export default function SelectCondition()
     let table=Array.from({ length: 28 }, () => Array(5).fill(null));
     return(
         <section className="container">
-            <h3 className="mb-3">시간표 설정</h3>
-            <p>원하는 조건을 선택하세요</p>
+            <p className="fs-3 fw-bold m-0">조건 선택</p>
+            <p className="text-body-tertiary">원하는 조건건을 선택하세요</p>
             <hr />
             <div className="d-flex justify-content-center">
                 <div className="w-75 mb-5">

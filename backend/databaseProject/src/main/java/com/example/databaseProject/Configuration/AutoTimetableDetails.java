@@ -13,8 +13,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.example.databaseProject.Information.Customer;
-import com.example.databaseProject.Information.CustomerRepository;
+import com.example.databaseProject.Information.CustomerInfo.Customer;
+import com.example.databaseProject.Information.CustomerInfo.CustomerRepository;
 
 @Service
 public class AutoTimetableDetails implements UserDetailsService {

@@ -18,12 +18,16 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.databaseProject.Information.CourseInfo.ClassTimeAndLocation;
+import com.example.databaseProject.Information.CourseInfo.ClassTimeAndLocationRepository;
 import com.example.databaseProject.Information.CourseInfo.Course;
 import com.example.databaseProject.Information.CourseInfo.CourseRepositery;
 import com.example.databaseProject.Information.CourseInfo.Session;
+import com.example.databaseProject.Information.CourseInfo.SessionRepository;
 import com.example.databaseProject.Information.CustomerInfo.Customer;
 import com.example.databaseProject.Information.CustomerInfo.CustomerRepository;
 import com.example.databaseProject.Information.CustomerInfo.MyTimeTableName;
@@ -52,6 +56,10 @@ public class TimeTable {
 	MyTimeTableSessionRepository myTimeTableSessionRepository;
 	@Autowired
 	MyTimeTableNameRepository myTimeTableNameRepository;
+	@Autowired
+	SessionRepository sessionRepository;
+	@Autowired
+	ClassTimeAndLocationRepository classTimeNLocationRepo;
 	
 	@PostMapping(path = "/basicOauth")
 	public String login()
@@ -166,6 +174,10 @@ public class TimeTable {
 	{
 		String oldName = requestData.get("oldName");
 	    String newName = requestData.get("newName");
+	    if(myTimeTableNameRepository.findById(newName).isPresent())
+	    {
+			return ResponseEntity.status(HttpStatus.CONFLICT).body("already exist");
+	    }
 	    MyTimeTableName myTable = myTimeTableNameRepository.findById(oldName).get();
 	    MyTimeTableName changeName = new MyTimeTableName(newName, myTable.getCustomer());
 	    myTimeTableNameRepository.save(changeName);
@@ -178,5 +190,26 @@ public class TimeTable {
 	public void deleteTable(@RequestBody String name)
 	{
 		myTimeTableNameRepository.deleteById(name);
+	}
+	
+	@PutMapping(path = "/updateCourse")
+	@Transactional
+	public void updateCourse(@RequestBody Course course)
+	{
+		Course existCourse = courseRepository.findById(course.getId()).get();
+		existCourse.setName(course.getName());
+		existCourse.setCode(course.getCode());
+		existCourse.setArea(course.getArea());
+		existCourse.setCredit(course.getCredit());
+		existCourse.setCurriculum(course.getCurriculum());
+		courseRepository.save(existCourse);
+	}
+	
+	@DeleteMapping(path = "/deleteCourse")
+	@Transactional
+	public void deleteCourse(@RequestBody String index)
+	{
+		int id = Integer.parseInt(index);
+		courseRepository.deleteById((long) id);
 	}
 }

@@ -6,7 +6,11 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -16,20 +20,34 @@ import jakarta.persistence.OneToMany;
 public class Session {
 	
 	@Id
-	private String courseID;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
 	
-	@JoinColumn(name = "name")
+	@JoinColumn(name = "courseID")
 	@JsonBackReference
 	@ManyToOne
 	private Course course;
 
 	@JsonManagedReference
-	@OneToMany(mappedBy = "session")
+	@OneToMany(mappedBy = "session", cascade = CascadeType.ALL)
 	private List<ClassTimeAndLocation> classTimeAndLocation = new ArrayList<ClassTimeAndLocation>();
 	
 	private String remarks;
 	
 	private String professor;
+	
+	private String sessionCODE;
+	
+	public Session() {}
+	
+	public Session(Course course, List<ClassTimeAndLocation> classTimeAndLocation, String remarks, String professor,
+			String sessionCODE) {
+		this.course = course;
+		this.classTimeAndLocation = classTimeAndLocation;
+		this.remarks = remarks;
+		this.professor = professor;
+		this.sessionCODE = sessionCODE;
+	}
 	
 	public String getRemarks() {
 		return remarks;
@@ -39,10 +57,6 @@ public class Session {
 		return professor;
 	}
 
-	public String getCourseID() {
-		return courseID;
-	}
-
 	public Course getCourse() {
 		return course;
 	}
@@ -50,7 +64,8 @@ public class Session {
 	public List<ClassTimeAndLocation> getClassTimeAndLocation() {
 		return classTimeAndLocation;
 	}
-	
-	
-	
+
+	public String getSessionCODE() {
+		return sessionCODE;
+	}
 }

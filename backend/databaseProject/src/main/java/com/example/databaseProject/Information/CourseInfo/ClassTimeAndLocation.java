@@ -3,6 +3,8 @@ package com.example.databaseProject.Information.CourseInfo;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -10,20 +12,27 @@ import jakarta.persistence.ManyToOne;
 @Entity
 public class ClassTimeAndLocation {
 	@Id
-	private String id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
 	
 	private int startTime;
 	private int endTime;
 	private String location;
 	private String week;
 	
-	@JoinColumn(name = "courseId")
+	@JoinColumn(name = "sessionID")
 	@JsonBackReference
 	@ManyToOne
 	private Session session;
 
-	public String getId() {
-		return id;
+	public ClassTimeAndLocation() {};
+	
+	public ClassTimeAndLocation(int startTime, int endTime, String location, String week, Session session) {
+		this.startTime = startTime;
+		this.endTime = endTime;
+		this.location = location;
+		this.week = week;
+		this.session = session;
 	}
 
 	public int getStart() {

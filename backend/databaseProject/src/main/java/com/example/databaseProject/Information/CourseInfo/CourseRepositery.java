@@ -9,8 +9,11 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CourseRepositery extends JpaRepository<Course, String> {
+public interface CourseRepositery extends JpaRepository<Course, Long> {
     
 	@Query(value = "SELECT * FROM COURSE WHERE name LIKE %:name%", nativeQuery = true)
 	List<Course> searchCourseName(@Param("name") String name);
+	
+    Optional<Course> findByName(String username);
+
 }

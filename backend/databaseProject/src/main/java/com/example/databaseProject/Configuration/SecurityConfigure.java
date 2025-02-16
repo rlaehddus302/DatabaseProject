@@ -35,7 +35,7 @@ public class SecurityConfigure {
             )
 		.authorizeHttpRequests((requests) -> 
 		requests.requestMatchers("/register","/error","/idDuplicate").permitAll()
-				.requestMatchers("/basicOauth","/myTable","/updateName","/deleteTable",
+				.requestMatchers("/basicOauth","/myTable","/updateName","/deleteTable","/updateCourse","/deleteCourse",
 				"/caculate","/SetCondition","/table","/course","/exit","/courseSearch","/storeMyTimeTable").authenticated());
 		http.formLogin(withDefaults());
         http.httpBasic(httpBasic -> httpBasic

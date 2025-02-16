@@ -49,7 +49,7 @@ export default function TimeTalbe()
                 setTable(resData)
                 setTimeout(() => {
                     setLoading(true)
-                }, length*20);
+                }, length*25);
             }
             catch(e)
             {

@@ -19,6 +19,7 @@ export default function Table(prop)
             popoverList.forEach(popover => popover.dispose());
         };
     },[])
+    console.log(prop)
     return(
         <>
                 <table className={`mb-1 ${styles.table}`} data-bs-theme="light" >
@@ -78,7 +79,7 @@ export default function Table(prop)
                                                                     `<div>
                                                                     ${prevStat.curriculum} ${prevStat.area}<br>
                                                                     ${prevStat.session.professor}<br>
-                                                                    ${prevStat.session.courseID}<br>
+                                                                    ${prevStat.session.sessionCODE}<br>
                                                                     ${locations}<br>
                                                                     ${prevStat.session.remarks}
                                                                     </div>`

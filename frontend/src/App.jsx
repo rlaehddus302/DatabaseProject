@@ -12,6 +12,8 @@ import Login from './Page/Login'
 import Logout from './Page/Logout'
 import SignUp from './Page/SignUp'
 import MyTable from './Page/MyTable'
+import EditSubject from './Page/EditSubject'
+import EditSession from './Page/EditSession'
 
 const router = createBrowserRouter([
  {path:'/', element:<Navbar/>, children:[
@@ -20,6 +22,8 @@ const router = createBrowserRouter([
     {path:'/selectSubject', element:<SelectSubject/>},
     {path:'/generateTimeTalbe', element:<TimeTalbe/>},
     {path:'/myTable', element:<MyTable/>},
+    {path:'/editSubject', element:<EditSubject/>},
+    {path:'/editSubject/:id', element:<EditSession/>},
   ]
  },
  {path:'/login', element:<Login/>},

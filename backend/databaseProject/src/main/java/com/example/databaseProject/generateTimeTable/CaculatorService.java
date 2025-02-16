@@ -65,7 +65,7 @@ public class CaculatorService {
 		{
 			return timeTable;
 		}
-		Optional<Course> courseOption = courseRepository.findById(courses[0]);
+		Optional<Course> courseOption = courseRepository.findByName(courses[0]);
 		Course course = courseOption.get();
 		List<Session> sessions = course.getSession();
 		sessions.stream().forEach(session -> {
@@ -79,7 +79,7 @@ public class CaculatorService {
 		});
 		for(int i=1;i<courses.length;i++)
 		{
-			courseOption = courseRepository.findById(courses[i]);
+			courseOption = courseRepository.findByName(courses[i]);
 			course = courseOption.get();
 			sessions = course.getSession();
 			ArrayList<ArrayList<ReturnInfo>> timeTableCopy = new ArrayList<ArrayList<ReturnInfo>>();

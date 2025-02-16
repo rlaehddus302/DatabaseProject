@@ -48,8 +48,4 @@ public class MyTimeTableName {
 	public void setSessions(List<MyTimeTableSession> sessions) {
 		this.sessions = sessions;
 	}
-	
-
-	
-	
 }

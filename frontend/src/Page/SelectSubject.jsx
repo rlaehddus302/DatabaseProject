@@ -69,14 +69,14 @@ export default function SelectSubject()
                         <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-2">
                             {courseList.map((value)=>{
                                 return(
-                                <Course selectList={name} handleSelect={setSelectList} name={value.name} courseCode={value.courseCode.code} credit={value.credit}/>
+                                <Course selectList={name} handleSelect={setSelectList} name={value.name} courseCode={value.code} credit={value.credit}/>
                             )})}
                         </div>
                         <p className="fs-4 fw-bold mt-3">선택한 과목</p>
                         {
                             selectList.map((value) => {
                                 return(
-                                    <Select handleSelect={setSelectList} name={value.name} courseCode={value.courseCode.code} credit={value.credit}></Select>
+                                    <Select handleSelect={setSelectList} name={value.name} courseCode={value.code} credit={value.credit}></Select>
                                 )
                             })
                         }

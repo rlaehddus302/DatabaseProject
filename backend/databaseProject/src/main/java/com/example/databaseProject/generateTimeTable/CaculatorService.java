@@ -227,7 +227,7 @@ public class CaculatorService {
 		returnInfo.setCurriculum(session.getCourse().getCurriculum());;
 		TNL.stream().forEach(t -> {
 			TimeBitmask timeBitmask = new TimeBitmask();
-			timeBitmask.setTime(setTimeRange(t.getStart(), t.getEnd()));
+			timeBitmask.setTime(setTimeRange(t.getStartTime(), t.getEndTime()));
 			timeBitmask.setWeek(setWeek(t.getWeek()));
 			returnInfo.add(timeBitmask);
 		});

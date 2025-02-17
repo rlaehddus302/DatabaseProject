@@ -49,6 +49,10 @@ public class Session {
 		this.sessionCODE = sessionCODE;
 	}
 	
+	public long getId() {
+		return id;
+	}
+
 	public String getRemarks() {
 		return remarks;
 	}
@@ -68,4 +72,22 @@ public class Session {
 	public String getSessionCODE() {
 		return sessionCODE;
 	}
+
+	public void setClassTimeAndLocation(List<ClassTimeAndLocation> classTimeAndLocation) {
+		this.classTimeAndLocation = classTimeAndLocation;
+	}
+
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
+	}
+
+	public void setProfessor(String professor) {
+		this.professor = professor;
+	}
+
+	public void setSessionCODE(String sessionCODE) {
+		this.sessionCODE = sessionCODE;
+	}
+	
+	
 }

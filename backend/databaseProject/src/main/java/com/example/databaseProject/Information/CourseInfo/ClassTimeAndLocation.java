@@ -34,12 +34,16 @@ public class ClassTimeAndLocation {
 		this.week = week;
 		this.session = session;
 	}
+	
+	public long getId() {
+		return id;
+	}
 
-	public int getStart() {
+	public int getStartTime() {
 		return startTime;
 	}
 
-	public int getEnd() {
+	public int getEndTime() {
 		return endTime;
 	}
 
@@ -54,4 +58,22 @@ public class ClassTimeAndLocation {
 	public Session getSession() {
 		return session;
 	}
+
+	public void setStartTime(int startTime) {
+		this.startTime = startTime;
+	}
+
+	public void setEndTime(int endTime) {
+		this.endTime = endTime;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
+	public void setWeek(String week) {
+		this.week = week;
+	}
+
+
 }

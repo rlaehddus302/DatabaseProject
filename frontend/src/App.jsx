@@ -14,9 +14,10 @@ import SignUp from './Page/SignUp'
 import MyTable from './Page/MyTable'
 import EditSubject from './Page/EditSubject'
 import EditSession from './Page/EditSession'
+import ErrorPage from './Page/ErrorPage'
 
 const router = createBrowserRouter([
- {path:'/', element:<Navbar/>, children:[
+ {path:'/', element:<Navbar/>, errorElement:<ErrorPage/> ,children:[
     {path:'/', element:<RootPage/>},
     {path:'/conditionSelect', element:<SelectCondition/>},
     {path:'/selectSubject', element:<SelectSubject/>},

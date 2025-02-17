@@ -49,6 +49,7 @@ export default function EditSubject()
             copy.code = courseList[index].code
             copy.area = courseList[index].area
             copy.curriculum = courseList[index].curriculum
+            copy.id = courseList[index].id
             return copy;
         })
     }
@@ -130,7 +131,7 @@ export default function EditSubject()
                             <thead>
                                 <tr>
                                     <th scope="col">과목명</th>
-                                    <th scope="col">학수번호</th>
+                                    <th scope="col">과목코드</th>
                                     <th scope="col">학점</th>
                                     <th scope="col">액션</th>
                                 </tr>
@@ -178,7 +179,7 @@ export default function EditSubject()
                             <div className="row mb-3">
                                 <div className="col-3">
                                     <div className="h-100 d-flex align-items-center">
-                                        <label className="ms-auto mb-0 form-label">학수번호</label>
+                                        <label className="ms-auto mb-0 form-label">과목코드</label>
                                     </div>
                                 </div>
                                 <div className="col-9">

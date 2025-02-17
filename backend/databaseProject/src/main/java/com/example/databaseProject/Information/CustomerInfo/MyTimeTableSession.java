@@ -18,7 +18,7 @@ public class MyTimeTableSession {
 	private long id;
 	
 	@ManyToOne
-	@JoinColumn(name = "course_id")
+	@JoinColumn(name = "session_id")
 	private Session session;
 	
 	@ManyToOne

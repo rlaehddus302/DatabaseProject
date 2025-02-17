@@ -60,10 +60,10 @@ export default function Table(prop)
                                             prop.prop.map((prevStat, index)=>{
                                                 return prevStat.session.classTimeAndLocation
                                                 .map(value => {
-                                                    let startInt = Math.floor(value.start/100)
-                                                    let endInt = Math.floor(value.end/100)
-                                                    let startFloat = value.start/100-startInt
-                                                    let endFloat = value.end/100 - endInt
+                                                    let startInt = Math.floor(value.startTime/100)
+                                                    let endInt = Math.floor(value.endTime/100)
+                                                    let startFloat = value.startTime/100-startInt
+                                                    let endFloat = value.endTime/100 - endInt
                                                     let int = endInt- startInt
                                                     let float = (endFloat - startFloat)*10/6
                                                     let height = (int+float)*40;

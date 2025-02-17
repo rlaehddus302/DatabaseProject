@@ -17,11 +17,13 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.databaseProject.ExceptionHandle.CustomException.CourseNotFoundException;
 import com.example.databaseProject.Information.CourseInfo.ClassTimeAndLocation;
 import com.example.databaseProject.Information.CourseInfo.ClassTimeAndLocationRepository;
 import com.example.databaseProject.Information.CourseInfo.Course;
@@ -203,6 +205,12 @@ public class TimeTable {
 		existCourse.setCredit(course.getCredit());
 		existCourse.setCurriculum(course.getCurriculum());
 		courseRepository.save(existCourse);
+		List<Session> sessions = existCourse.getSession();
+		sessions.stream().forEach(session -> {
+			String sessionCode = session.getSessionCODE();
+			session.setSessionCODE(existCourse.getCode()+"-"+sessionCode.split("-")[1]);
+			sessionRepository.save(session);
+		});
 	}
 	
 	@DeleteMapping(path = "/deleteCourse")
@@ -211,5 +219,40 @@ public class TimeTable {
 	{
 		int id = Integer.parseInt(index);
 		courseRepository.deleteById((long) id);
+	}
+	
+	@GetMapping(path = "/course/{id}")
+	public Course getSession(@PathVariable long id)
+	{
+		Course course =courseRepository.findById(id).orElseThrow(() -> new CourseNotFoundException("course Not Exist"));
+		return course;
+	}
+	
+	@PutMapping(path = "/updateSession")
+	@Transactional
+	public void updateSession(@RequestBody Session session)
+	{
+		Session existSession = sessionRepository.findById(session.getId()).get();
+		existSession.setProfessor(session.getProfessor());
+		existSession.setRemarks(session.getRemarks());
+		existSession.setSessionCODE(session.getSessionCODE());
+		sessionRepository.save(existSession);
+		List<ClassTimeAndLocation> tnls = existSession.getClassTimeAndLocation();
+		for(int i=0;i<tnls.size();i++)
+		{
+			ClassTimeAndLocation tnl = tnls.get(i);
+			tnl.setEndTime(session.getClassTimeAndLocation().get(i).getEndTime());
+			tnl.setLocation(session.getClassTimeAndLocation().get(i).getLocation());
+			tnl.setStartTime(session.getClassTimeAndLocation().get(i).getStartTime());
+			tnl.setWeek(session.getClassTimeAndLocation().get(i).getWeek());
+			classTimeNLocationRepo.save(tnl);
+		}
+	}
+	
+	@DeleteMapping(path = "/deleteSession")
+	public void deleteSession(String index)
+	{
+		int id = Integer.parseInt(index);
+		sessionRepository.deleteById((long) id);
 	}
 }

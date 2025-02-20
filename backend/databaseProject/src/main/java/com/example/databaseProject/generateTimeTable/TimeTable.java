@@ -1,10 +1,16 @@
 package com.example.databaseProject.generateTimeTable;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -21,9 +27,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.databaseProject.ExceptionHandle.CustomException.CourseNotFoundException;
+import com.example.databaseProject.Information.AcademicTerm;
+import com.example.databaseProject.Information.AcademicTermRepo;
 import com.example.databaseProject.Information.CourseInfo.ClassTimeAndLocation;
 import com.example.databaseProject.Information.CourseInfo.ClassTimeAndLocationRepository;
 import com.example.databaseProject.Information.CourseInfo.Course;
@@ -62,6 +72,8 @@ public class TimeTable {
 	SessionRepository sessionRepository;
 	@Autowired
 	ClassTimeAndLocationRepository classTimeNLocationRepo;
+	@Autowired
+	AcademicTermRepo academicTermRepo;
 	
 	@PostMapping(path = "/basicOauth")
 	public String login()
@@ -74,10 +86,16 @@ public class TimeTable {
 		session.invalidate();
 		return "Success";
 	}
-	@GetMapping(path = "/course")
-	public List<Course> course()
+	@PostMapping(path = "/course")
+	public List<Course> course(@RequestBody AcademicTerm requestData)
 	{
-		return courseRepository.findAll();
+		List<Course> courses = new ArrayList<Course>();
+		Optional<AcademicTerm> academicTerm = academicTermRepo.findByYearAndSemester(requestData.getAcademic_year(), requestData.getSemester());
+		if(academicTerm.isPresent())
+		{
+			courses = academicTerm.get().getCourse();
+		}
+		return courses;
 	}
 	@PostMapping(path = "/courseSearch")
 	public List<Course> search(@RequestBody String name)
@@ -102,8 +120,9 @@ public class TimeTable {
 	@PostMapping(path = "/register")
 	public ResponseEntity<String> signUp(@RequestBody Customer customer)
 	{
+		System.out.println(customer.getId());
 		String encodedPassword = passwordEncoder.encode(customer.getPassword());
-		Customer newCustomer = new Customer(customer.getId(), customer.getStudentNumber(), encodedPassword, customer.getName());
+		Customer newCustomer = new Customer(customer.getId(), customer.getStudentNumber(), encodedPassword, customer.getName(), "ROLE_USER");
 		customerRepository.save(newCustomer);
 		return ResponseEntity.status(HttpStatus.CREATED).body("create success");
 	}
@@ -255,4 +274,25 @@ public class TimeTable {
 		int id = Integer.parseInt(index);
 		sessionRepository.deleteById((long) id);
 	}
+	
+	@PostMapping(path = "/csv")
+    public ResponseEntity<String> uploadFile(@RequestParam("csv") MultipartFile file, @RequestParam("academic_year") int academic_year, 
+    		@RequestParam("semester") int semester) throws IOException {
+        if (file.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("파일이 없습니다.");
+        }
+        String fileName = file.getOriginalFilename();
+        if (fileName == null || !fileName.toLowerCase().endsWith(".csv")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("CSV 파일만 업로드 가능합니다.");
+        }
+        BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream()));
+        CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.builder().setHeader().setSkipHeaderRecord(true).build());
+        
+        for (CSVRecord record : csvParser) {
+            String time = record.get("요일/교시");
+            System.out.println("Time: " + time);
+        }
+        
+        return null;
+    }
 }

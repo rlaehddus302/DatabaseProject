@@ -3,6 +3,11 @@ import { useNavigate } from "react-router-dom";
 export default function EditSubject()
 {
     const [courseList, setCourseList] = useState([])
+    const [error, setError] = useState(null);
+    const [academicTerm, setAcademicTerm] = useState({
+        "academic_year" : new Date().getFullYear(),
+        "semester" : 1 
+    })
     const [course,setCourse] = useState({
         "name" : null,
         "credit" : null,
@@ -13,30 +18,51 @@ export default function EditSubject()
     })
     const navigate = useNavigate();
     const modalRef = useRef(null);
-    useEffect(() => {
-            async function fetchCourse() {
-                let response
-                try
-                {
-                    response = await fetch('http://localhost:8080/course',{
-                        credentials: "include",
-                    })
-                    const resData = await response.json()
-                    setCourseList(resData)
-                    console.log(resData)
-                }
-                catch(e)
-                {
-                    console.error("실패")
-                    console.error(e)
-                }
+    const csvRef = useRef(null);
+    if(error)
+    {
+        throw error
+    }
+    async function fetchCourse(value) {
+        let response
+        let data = JSON.stringify(value)
+        try
+        {
+            response = await fetch('http://localhost:8080/course',{
+                method : "POST",
+                credentials: "include",
+                body : data,
+                headers: {
+                    'Content-Type': 'application/json', 
+                },
+            })
+            const resData = await response.json()
+            if(response.ok)
+            {
+                setCourseList(resData)
+                console.log(resData)
             }
+            else
+            {
+                const err = new Error();
+                err.status = response.status;
+                err.body = resData;
+                throw err;
+            }
+            
+        }
+        catch(e)
+        {
+            setError(e);
+        }
+    }
+    useEffect(() => {
             const success =localStorage.getItem("login");
             if(success != "success")
                 {
                     navigate("/login")
                 }
-            fetchCourse()
+            fetchCourse(academicTerm)
         },[])
     function openModal(index)
     {
@@ -118,6 +144,33 @@ export default function EditSubject()
             })
         }
     }
+    async function uploadCSV(csv) {
+        const formData = new FormData();
+        formData.append("csv", csv);
+        formData.append("academic_year", academicTerm.academic_year)
+        formData.append("semester",academicTerm.semester)
+        try {
+            const response = await fetch("http://localhost:8080/csv", {
+                credentials: "include",
+                method: "POST",
+                body: formData
+            });
+    
+            const data = await response.json();
+            console.log("Upload Success:", data);
+        } catch (error) {
+            console.error("Upload Error:", error);
+        }
+    }
+
+    function handleAcademicTerm(name, value)
+    {
+        const copy = {...academicTerm,
+            [name] : value,
+        }
+        setAcademicTerm(copy)
+        fetchCourse(copy)
+    }
     return(
         <section className="container">
             <p className="fs-3 fw-bold m-0">과목 수정</p>
@@ -127,6 +180,21 @@ export default function EditSubject()
                 <div className="w-75 border border-dark-subtle rounded mb-3">
                     <div className="mx-3">
                         <p className="mt-3 fs-4 fw-bold">과목 목록</p>
+                        <div className="d-flex">
+                            <input type="number" value={academicTerm.academic_year} min={2000} max={2100} onChange={(e)=>{handleAcademicTerm("academic_year",e.target.value)}} className="form-control me-2 w-25"/>
+                            <select value={academicTerm.semester} className="form-select w-25" onChange={(e)=>{handleAcademicTerm("semester",e.target.value)}} aria-label="Default select example">
+                                <option value="1">1학기</option>
+                                <option value="2">2학기</option>
+                            </select>
+                        </div>
+                        <div className="d-flex">
+                            <button type="button" className="btn btn-dark h-50" style={{marginTop: "2.0em"}}>과목 추가</button>
+                            <div class="mb-3 ms-auto">
+                                <label htmlFor="formFile" className="form-label fw-bold">csv파일 업로드</label>
+                                <input accept=".csv" ref={csvRef} className="form-control" type="file" id="formFile"/>
+                            </div>
+                            <button type="button" className="btn btn-dark h-50 ms-1" onClick={()=>{uploadCSV(csvRef.current.files[0])}} style={{marginTop: "2.0em"}}>확인</button>
+                        </div>
                         <table className="table">
                             <thead>
                                 <tr>

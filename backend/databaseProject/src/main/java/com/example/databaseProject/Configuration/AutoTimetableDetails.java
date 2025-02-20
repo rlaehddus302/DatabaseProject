@@ -27,7 +27,7 @@ public class AutoTimetableDetails implements UserDetailsService {
 		
 		Customer customer = customerRepository.findById(username).orElseThrow(() -> new UsernameNotFoundException(
 				username + "is not exist"));
-		List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_USER"));
+		List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(customer.getRole()));
 		User user = new User(username,customer.getPassword(), authorities);
 		return user;
 	}

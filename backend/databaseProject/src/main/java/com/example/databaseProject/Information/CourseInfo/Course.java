@@ -3,6 +3,9 @@ package com.example.databaseProject.Information.CourseInfo;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.databaseProject.Information.AcademicTerm;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
@@ -11,6 +14,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 
@@ -32,21 +37,37 @@ public class Course {
 	private String curriculum;
 	private String area;
 
+	@ManyToOne
+	@JoinColumn(name = "academicTerm_ID")
+	@JsonIgnore
+	private AcademicTerm academicTerm;
+	
 	@JsonManagedReference
 	@OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
 	private List<Session> session = new ArrayList<Session>();
 	
 	public Course() {};
 	
-	public Course(String name, int credit, String code, String curriculum, String area, List<Session> session) {
+	public Course(String name, int credit, String code, String curriculum, String area,
+			AcademicTerm academicTerm, List<Session> session) {
 		this.name = name;
 		this.credit = credit;
 		this.code = code;
 		this.curriculum = curriculum;
 		this.area = area;
+		this.academicTerm = academicTerm;
 		this.session = session;
 	}
-	
+
+	public AcademicTerm getAcademicTerm() {
+		return academicTerm;
+	}
+
+
+	public void setAcademicTerm(AcademicTerm academicTerm) {
+		this.academicTerm = academicTerm;
+	}
+
 	public String getName() {
 		return name;
 	}

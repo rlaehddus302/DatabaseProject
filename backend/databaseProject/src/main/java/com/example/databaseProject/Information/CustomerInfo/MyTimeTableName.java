@@ -2,6 +2,9 @@ package com.example.databaseProject.Information.CustomerInfo;
 
 import java.util.List;
 
+import com.example.databaseProject.Information.AcademicTerm;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -22,8 +25,12 @@ public class MyTimeTableName {
 	@JoinColumn(name = "customerId")
 	private Customer customer;
 	
-	public MyTimeTableName() {};
+	@ManyToOne
+	@JoinColumn(name = "academicTerm_ID")
+	private AcademicTerm academicTerm;
 	
+	public MyTimeTableName() {};
+
 	public MyTimeTableName(String name, Customer customer) {
 		this.name = name;
 		this.customer = customer;
@@ -47,5 +54,13 @@ public class MyTimeTableName {
 
 	public void setSessions(List<MyTimeTableSession> sessions) {
 		this.sessions = sessions;
+	}
+
+	public AcademicTerm getAcademicTerm() {
+		return academicTerm;
+	}
+
+	public void setAcademicTerm(AcademicTerm academicTerm) {
+		this.academicTerm = academicTerm;
 	}
 }

@@ -2,6 +2,8 @@ package com.example.databaseProject.Information.CustomerInfo;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
@@ -14,22 +16,21 @@ public class Customer {
 	private long studentNumber;
 	private String password;
 	private String name;
+	@JsonIgnore
+	private String role;
 	
 	@OneToMany(mappedBy = "customer")
 	private List<MyTimeTableName> tableNames;
 	
     public Customer() {
     }
-	
-	public List<MyTimeTableName> getTableNames() {
-		return tableNames;
-	}
 
-	public Customer(String id, long studentNumber, String password, String name) {
+	public Customer(String id, long studentNumber, String password, String name, String role) {
 		this.id = id;
 		this.studentNumber = studentNumber;
 		this.password = password;
 		this.name = name;
+		this.role = role;
 	}
 	public long getStudentNumber() {
 		return studentNumber;
@@ -43,5 +44,12 @@ public class Customer {
 	public String getPassword() {
 		return password;
 	}
+
+	public String getRole() {
+		return role;
+	}
 	
+	public List<MyTimeTableName> getTableNames() {
+		return tableNames;
+	}
 }

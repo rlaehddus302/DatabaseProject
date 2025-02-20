@@ -35,8 +35,9 @@ public class SecurityConfigure {
             )
 		.authorizeHttpRequests((requests) -> 
 		requests.requestMatchers("/register","/error","/idDuplicate").permitAll()
-				.requestMatchers("/basicOauth","/myTable","/updateName","/deleteTable","/updateCourse","/deleteCourse","/course/*",
-				"/caculate","/SetCondition","/table","/course","/exit","/courseSearch","/storeMyTimeTable","/updateSession").authenticated());
+				.requestMatchers("/updateCourse","/deleteCourse","/updateSession","/csv","/course/*","/course").hasRole("ADMIN")
+				.requestMatchers("/basicOauth","/myTable","/updateName","/deleteTable",
+				"/caculate","/SetCondition","/table","/exit","/courseSearch","/storeMyTimeTable").hasAnyRole("ADMIN","USER"));
 		http.formLogin(withDefaults());
         http.httpBasic(httpBasic -> httpBasic
                 .authenticationEntryPoint(new CustomAuthenticationEntryPoint())

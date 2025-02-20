@@ -156,7 +156,7 @@ export default function EditSubject()
                 body: formData
             });
     
-            const data = await response.json();
+            alert("생성이 완료되었습니다.");
             console.log("Upload Success:", data);
         } catch (error) {
             console.error("Upload Error:", error);

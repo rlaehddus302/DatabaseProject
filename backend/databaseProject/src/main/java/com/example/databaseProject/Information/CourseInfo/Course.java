@@ -25,13 +25,13 @@ public class Course {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
-	@Column(name = "name", unique = true)
+	@Column(name = "name")
 	private String name;
 
 	@Column(name = "credit")
 	private int credit;
 	
-	@Column(name = "code", unique = true)
+	@Column(name = "code")
 	private String code;
 	
 	private String curriculum;

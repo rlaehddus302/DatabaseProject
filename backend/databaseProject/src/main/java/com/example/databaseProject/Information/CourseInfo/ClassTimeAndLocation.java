@@ -15,8 +15,8 @@ public class ClassTimeAndLocation {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
-	private int startTime;
-	private int endTime;
+	private int startTime = -1;
+	private int endTime = -1;
 	private String location;
 	private String week;
 	
@@ -53,6 +53,10 @@ public class ClassTimeAndLocation {
 
 	public String getWeek() {
 		return week;
+	}
+	
+	public void setSession(Session session) {
+		this.session = session;
 	}
 
 	public Session getSession() {

@@ -18,13 +18,11 @@ import com.example.databaseProject.Information.CourseInfo.Session;
 import com.example.databaseProject.Information.CustomerInfo.CustomerRepository;
 import com.example.databaseProject.TDO.ReturnInfo;
 import com.example.databaseProject.generateTimeTable.CaculatorService;
+import com.example.databaseProject.generateTimeTable.CsvToDatabaseLoader;
 
 import jakarta.transaction.Transactional;
 
 @SpringBootTest
 class DatabaseProjectApplicationTests {
 	
-	@Autowired
-	CustomerRepository customerRepository;
-
 }

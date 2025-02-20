@@ -58,6 +58,10 @@ public class AcademicTerm {
 	public void setSemester(int semester) {
 		this.semester = semester;
 	}
+	
+	public void setCourse(List<Course> course) {
+		this.course = course;
+	}
 
 	public List<Course> getCourse() {
 		return course;

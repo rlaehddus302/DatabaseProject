@@ -74,6 +74,8 @@ public class TimeTable {
 	ClassTimeAndLocationRepository classTimeNLocationRepo;
 	@Autowired
 	AcademicTermRepo academicTermRepo;
+	@Autowired
+	CsvToDatabaseLoader csvToDatabaseLoader;
 	
 	@PostMapping(path = "/basicOauth")
 	public String login()
@@ -276,6 +278,7 @@ public class TimeTable {
 	}
 	
 	@PostMapping(path = "/csv")
+	@Transactional
     public ResponseEntity<String> uploadFile(@RequestParam("csv") MultipartFile file, @RequestParam("academic_year") int academic_year, 
     		@RequestParam("semester") int semester) throws IOException {
         if (file.isEmpty()) {
@@ -285,14 +288,22 @@ public class TimeTable {
         if (fileName == null || !fileName.toLowerCase().endsWith(".csv")) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("CSV 파일만 업로드 가능합니다.");
         }
+        
+        Optional<AcademicTerm> academicTerm = academicTermRepo.findByYearAndSemester(academic_year, semester);
+        if(academicTerm.isPresent())
+        {
+        	academicTermRepo.deleteById(academicTerm.get().getId());
+        }
+        
+        AcademicTerm makeTerm = new AcademicTerm(academic_year, semester);
+        
         BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream()));
         CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.builder().setHeader().setSkipHeaderRecord(true).build());
         
-        for (CSVRecord record : csvParser) {
-            String time = record.get("요일/교시");
-            System.out.println("Time: " + time);
-        }
+        makeTerm = csvToDatabaseLoader.insertDataFromCsv(csvParser, makeTerm);
         
-        return null;
+        academicTermRepo.save(makeTerm);
+        
+        return ResponseEntity.status(HttpStatus.CREATED).body("생성되었습니다.");
     }
 }

@@ -12,6 +12,9 @@ export default function MyTable()
         {
             let response = await fetch('http://localhost:8080/myTable',{
                 credentials: "include",
+                headers: {
+                    'Authorization': localStorage.getItem("jwt"),
+                }
             })
             const resData = await response.json()
             console.log(response)
@@ -45,6 +48,7 @@ export default function MyTable()
             method: "PATCH",
             headers: {
                 'Content-Type': 'application/json', 
+                'Authorization': localStorage.getItem("jwt"),
             },
             body: sendData,
         })
@@ -74,7 +78,8 @@ export default function MyTable()
             credentials: "include",
             method: "DELETE",
             headers: {
-                'Content-Type': 'text/plain', 
+                'Content-Type': 'text/plain',
+                'Authorization': localStorage.getItem("jwt"), 
             },
             body: choice.name,
         })

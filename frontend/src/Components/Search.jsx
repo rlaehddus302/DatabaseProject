@@ -15,7 +15,9 @@ export default function Search({handleSelect})
                     method: 'POST',
                     credentials: "include",
                     body: JSON.stringify(query),
-                    headers: { 'Content-Type': 'application/json' }
+                    headers: { 'Content-Type': 'application/json',
+                        'Authorization': localStorage.getItem("jwt"),
+                     }
                 });
                 const temp = await response.json();
                 console.log(temp);

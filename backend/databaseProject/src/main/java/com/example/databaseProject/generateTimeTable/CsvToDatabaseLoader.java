@@ -17,7 +17,7 @@ import com.example.databaseProject.Information.CourseInfo.Session;
 @Service
 public class CsvToDatabaseLoader {
 	
-	private int periods[][] = {
+	private final int periods[][] = {
 		    { 800,  830}, { 830,  900},
 		    { 900,  930}, { 930, 1000},
 		    {1000, 1030}, {1030, 1100},

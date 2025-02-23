@@ -68,7 +68,9 @@ export default function SelectCondition()
                 method: 'POST',
                 credentials: "include",
                 body: JSON.stringify(fetchData),
-                headers: { 'Content-Type': 'application/json' }
+                headers: { 'Content-Type': 'application/json',
+                    'Authorization': localStorage.getItem("jwt"),
+                 }
             });
             console.log("완료")
             navigate("/selectSubject")

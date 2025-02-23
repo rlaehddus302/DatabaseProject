@@ -7,6 +7,10 @@ export default function SelectSubject()
 {
     const [courseList, setCourseList] = useState([])
     const [selectList, setSelectList] = useState([])
+    const [academicTerm, setAcademicTerm] = useState({
+        "academic_year" : new Date().getFullYear(),
+        "semester" : 1 
+    })
     const navigate = useNavigate();
     async function move()
     {
@@ -22,18 +26,31 @@ export default function SelectSubject()
                 method: 'POST',
                 credentials: "include",
                 body: JSON.stringify(courses),
-                headers: { 'Content-Type': 'application/json' }
+                headers: { 'Content-Type': 'application/json',
+                    'Authorization': localStorage.getItem("jwt"),
+                 }
             });
             navigate("/generateTimeTalbe")
         }
     }
+    function handleAcademicTerm(name, value)
+    {
+        const copy = {...academicTerm,
+            [name] : value,
+        }
+        setAcademicTerm(copy)
+    }
     useEffect(() => {
         async function fetchCourse() {
             let response
+            const currentYear = new Date().getFullYear();
             try
             {
-                response = await fetch('http://localhost:8080/course',{
+                response = await fetch(`http://localhost:8080/course?year=${currentYear}&semester=1`,{
                     credentials: "include",
+                    headers:{ 
+                        'Authorization': localStorage.getItem("jwt"),
+                    }
                 })
                 const resData = await response.json()
                 setCourseList(resData)
@@ -66,6 +83,13 @@ export default function SelectSubject()
                         </button>
                         <Search handleSelect={setSelectList}/>
                         <p className="fs-4 fw-bold">과목 목록</p>
+                        <div className="d-flex">
+                            <input type="number" value={academicTerm.academic_year} min={2000} max={2100} onChange={(e)=>{handleAcademicTerm("academic_year",e.target.value)}} className="form-control me-2 w-25"/>
+                            <select value={academicTerm.semester} className="form-select w-25" onChange={(e)=>{handleAcademicTerm("semester",e.target.value)}} aria-label="Default select example">
+                                <option value="1">1학기</option>
+                                <option value="2">2학기</option>
+                            </select>
+                        </div>
                         <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-2">
                             {courseList.map((value)=>{
                                 return(

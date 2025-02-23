@@ -10,6 +10,9 @@ export default function Logout()
             const response = await fetch('http://localhost:8080/exit', {
                 method: 'POST',
                 credentials: 'include',
+                headers : {
+                    'Authorization': localStorage.getItem("jwt"),
+                }
             });
             console.log(response)
             if(response.status != 200)

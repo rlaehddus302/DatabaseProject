@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.example.databaseProject.Information.AcademicTerm;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -27,6 +28,7 @@ public class MyTimeTableName {
 	
 	@ManyToOne
 	@JoinColumn(name = "academicTerm_ID")
+	@JsonIgnore
 	private AcademicTerm academicTerm;
 	
 	public MyTimeTableName() {};

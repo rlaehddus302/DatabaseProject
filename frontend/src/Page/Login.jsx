@@ -21,10 +21,12 @@ export default function Login()
             });
             console.log(response)
             if(response.status != 200)
-                {
-                    throw new Error("로그인 오류");
-                } 
+            {
+                throw new Error("로그인 오류");
+            }
+            let jwt = response.headers.get("Authorization") 
             localStorage.setItem("login","success");
+            localStorage.setItem("jwt",jwt);
             navigate("/")
         }
         catch(e)

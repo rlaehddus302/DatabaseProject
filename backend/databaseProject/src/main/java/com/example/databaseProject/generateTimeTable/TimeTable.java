@@ -51,6 +51,7 @@ import com.example.databaseProject.TDO.ReceivedValue;
 import com.example.databaseProject.TDO.ReturnInfo;
 import com.example.databaseProject.TDO.StoreMyTimeTableForm;
 
+import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 
@@ -85,14 +86,13 @@ public class TimeTable {
 	@PostMapping(path = "/exit")
 	public String logOut(HttpSession session)
 	{
-		session.invalidate();
 		return "Success";
 	}
-	@PostMapping(path = "/course")
-	public List<Course> course(@RequestBody AcademicTerm requestData)
+	@GetMapping(path = "/course")
+	public List<Course> course(@RequestParam int year, int semester)
 	{
 		List<Course> courses = new ArrayList<Course>();
-		Optional<AcademicTerm> academicTerm = academicTermRepo.findByYearAndSemester(requestData.getAcademic_year(), requestData.getSemester());
+		Optional<AcademicTerm> academicTerm = academicTermRepo.findByYearAndSemester(year,semester);
 		if(academicTerm.isPresent())
 		{
 			courses = academicTerm.get().getCourse();
@@ -242,7 +242,19 @@ public class TimeTable {
 		courseRepository.deleteById((long) id);
 	}
 	
-	@GetMapping(path = "/course/{id}")
+	@PostMapping(path = "/adminCourse")
+	public List<Course> adminCourse(@RequestBody AcademicTerm requestData)
+	{
+		List<Course> courses = new ArrayList<Course>();
+		Optional<AcademicTerm> academicTerm = academicTermRepo.findByYearAndSemester(requestData.getAcademic_year(), requestData.getSemester());
+		if(academicTerm.isPresent())
+		{
+			courses = academicTerm.get().getCourse();
+		}
+		return courses;
+	}
+	
+	@GetMapping(path = "/adminCourse/{id}")
 	public Course getSession(@PathVariable long id)
 	{
 		Course course =courseRepository.findById(id).orElseThrow(() -> new CourseNotFoundException("course Not Exist"));

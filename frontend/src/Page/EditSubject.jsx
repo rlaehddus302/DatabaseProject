@@ -28,12 +28,13 @@ export default function EditSubject()
         let data = JSON.stringify(value)
         try
         {
-            response = await fetch('http://localhost:8080/course',{
+            response = await fetch('http://localhost:8080/adminCourse',{
                 method : "POST",
                 credentials: "include",
                 body : data,
                 headers: {
-                    'Content-Type': 'application/json', 
+                    'Content-Type': 'application/json',
+                    'Authorization': localStorage.getItem("jwt") 
                 },
             })
             const resData = await response.json()
@@ -97,7 +98,8 @@ export default function EditSubject()
             method : "PUT",
             body : data,
             headers: {
-                'Content-Type': 'application/json', 
+                'Content-Type': 'application/json',
+                'Authorization': localStorage.getItem("jwt") 
             },
         })
         if(response.ok)
@@ -132,7 +134,8 @@ export default function EditSubject()
             method : "DELETE",
             body : index,
             headers: {
-                'Content-Type': 'text/plain', 
+                'Content-Type': 'text/plain',
+                'Authorization': localStorage.getItem("jwt") 
             },
         })
         if(response.ok)
@@ -153,7 +156,10 @@ export default function EditSubject()
             const response = await fetch("http://localhost:8080/csv", {
                 credentials: "include",
                 method: "POST",
-                body: formData
+                body: formData,
+                headers:{
+                    'Authorization': localStorage.getItem("jwt"),
+                }
             });
     
             alert("생성이 완료되었습니다.");

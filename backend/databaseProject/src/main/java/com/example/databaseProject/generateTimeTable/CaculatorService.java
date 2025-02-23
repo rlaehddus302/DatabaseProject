@@ -25,6 +25,7 @@ import java.util.regex.*;
 public class CaculatorService {
 	@Autowired
 	private CourseRepositery courseRepository;
+	
 	private String[] courses = {};
 	private ArrayList<ArrayList<ReturnInfo>> timeTable;
 	private TimeBitmask[] freePeriod = new TimeBitmask[5];

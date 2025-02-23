@@ -15,8 +15,11 @@ export default function EditSession()
                     let response
                     try
                     {
-                        response = await fetch(`http://localhost:8080/course/${param.id}` ,{
+                        response = await fetch(`http://localhost:8080/adminCourse/${param.id}` ,{
                             credentials: "include",
+                            headers: {
+                                'Authorization': localStorage.getItem("jwt")
+                            }
                         })
                         const resData = await response.json()
                         if(response.ok)
@@ -78,6 +81,7 @@ export default function EditSession()
             body : data,
             headers: {
                 'Content-Type': 'application/json', 
+                'Authorization': localStorage.getItem("jwt")
             },
         })
         if(response.ok)
@@ -112,6 +116,7 @@ export default function EditSession()
             body : index,
             headers: {
                 'Content-Type': 'text/plain', 
+                'Authorization': localStorage.getItem("jwt")
             },
         })
         if(response.ok)

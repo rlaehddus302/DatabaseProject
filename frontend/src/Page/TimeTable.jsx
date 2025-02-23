@@ -22,7 +22,9 @@ export default function TimeTalbe()
             method: 'POST',
             credentials: "include",
             body: JSON.stringify(fetchData),
-            headers: { 'Content-Type': 'application/json' }
+            headers: { 'Content-Type': 'application/json',
+                'Authorization': localStorage.getItem("jwt"),
+             }
         });
         console.log(response)
         if(response.ok === false)

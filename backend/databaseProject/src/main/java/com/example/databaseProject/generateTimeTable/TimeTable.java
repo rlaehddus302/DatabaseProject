@@ -155,10 +155,10 @@ public class TimeTable {
 	}
 	
 	@PostMapping(path = "/storeMyTimeTable")
-	public ResponseEntity<String> storeMyTimeTable(@RequestBody StoreMyTimeTableForm data,@AuthenticationPrincipal UserDetails userDetails)
+	public ResponseEntity<String> storeMyTimeTable(@RequestBody StoreMyTimeTableForm data, @AuthenticationPrincipal String username)
 			throws UsernameNotFoundException
 	{
-		String userId = userDetails.getUsername();
+		String userId = username;
 		Optional<Customer> customer = customerRepository.findById(userId);
 		String tableName = data.getTableName();
 		if(myTimeTableNameRepository.findById(tableName).isPresent())
@@ -177,10 +177,10 @@ public class TimeTable {
 	}
 	
 	@GetMapping(path = "/myTable")
-	public ArrayList<MyTable> myTable(@AuthenticationPrincipal UserDetails userDetails)
+	public ArrayList<MyTable> myTable(@AuthenticationPrincipal String username)
 	{
 		ArrayList<MyTable> myTables = new ArrayList<MyTable>();
-		String id = userDetails.getUsername();
+		String id = username;
 		Customer customer = customerRepository.findById(id).get();
 		List<MyTimeTableName> tableNames = customer.getTableNames();
 		tableNames.stream().forEach(tableName -> {

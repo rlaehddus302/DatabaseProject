@@ -39,34 +39,36 @@ export default function SelectSubject()
             [name] : value,
         }
         setAcademicTerm(copy)
+        fetchCourse(copy)
+    }
+    async function fetchCourse(value) {
+        let response
+        const currentYear = new Date().getFullYear();
+        try
+        {
+            response = await fetch(`http://localhost:8080/course?year=${value.academic_year}&semester=${value.semester}`,
+            {
+                credentials: "include",
+                headers:{ 
+                    'Authorization': localStorage.getItem("jwt"),
+                }
+            })
+            const resData = await response.json()
+            setCourseList(resData)
+        }
+        catch(e)
+        {
+            console.error("실패")
+            console.error(e)
+        }
     }
     useEffect(() => {
-        async function fetchCourse() {
-            let response
-            const currentYear = new Date().getFullYear();
-            try
-            {
-                response = await fetch(`http://localhost:8080/course?year=${currentYear}&semester=1`,{
-                    credentials: "include",
-                    headers:{ 
-                        'Authorization': localStorage.getItem("jwt"),
-                    }
-                })
-                const resData = await response.json()
-                setCourseList(resData)
-            }
-            catch(e)
-            {
-                console.error("실패")
-                console.error(e)
-            }
-        }
         const success =localStorage.getItem("login");
         if(success != "success")
             {
                 navigate("/login")
             }
-        fetchCourse()
+        fetchCourse(academicTerm)
     },[])
     let name = [...selectList]
     return (
@@ -81,9 +83,9 @@ export default function SelectSubject()
                             <i className="bi bi-search m-2"></i>
                             <span className="text-black-50">과목명으로 검색</span>
                         </button>
-                        <Search handleSelect={setSelectList}/>
+                        <Search handleSelect={setSelectList} academicTerm={academicTerm}/>
                         <p className="fs-4 fw-bold">과목 목록</p>
-                        <div className="d-flex">
+                        <div className="d-flex mb-3">
                             <input type="number" value={academicTerm.academic_year} min={2000} max={2100} onChange={(e)=>{handleAcademicTerm("academic_year",e.target.value)}} className="form-control me-2 w-25"/>
                             <select value={academicTerm.semester} className="form-select w-25" onChange={(e)=>{handleAcademicTerm("semester",e.target.value)}} aria-label="Default select example">
                                 <option value="1">1학기</option>

@@ -109,8 +109,8 @@ export default function EditSubject()
                 modal.hide();
             console.log(sendCourse.id)
             setCourseList((prevStat) => {
-                let copy = prevStat.map((course,index)=>{
-                    if(index === sendCourse.id - 1)
+                let copy = prevStat.map((course)=>{
+                    if(course.id === sendCourse.id)
                     {
                         return {...course,...sendCourse};
                     }
@@ -161,8 +161,8 @@ export default function EditSubject()
                     'Authorization': localStorage.getItem("jwt"),
                 }
             });
-    
             alert("생성이 완료되었습니다.");
+            navigate(0);
             console.log("Upload Success:", data);
         } catch (error) {
             console.error("Upload Error:", error);

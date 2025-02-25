@@ -100,10 +100,16 @@ public class TimeTable {
 		return courses;
 	}
 	@PostMapping(path = "/courseSearch")
-	public List<Course> search(@RequestBody String name)
+	public List<Course> search(@RequestBody String name, @RequestParam int year, int semester)
 	{
 		name = name.substring(1, name.length() - 1);
-		return courseRepository.searchCourseName(name);
+		Optional<AcademicTerm> academicTerm = academicTermRepo.findByYearAndSemester(year,semester);
+		if(academicTerm.isEmpty())
+		{
+			List<Course> courses = new ArrayList<Course>();
+			return courses;
+		}
+		return courseRepository.searchCourseName(name,academicTerm.get().getId());
 	}
 	
 	@PostMapping(path = "/caculate")
@@ -283,7 +289,7 @@ public class TimeTable {
 	}
 	
 	@DeleteMapping(path = "/deleteSession")
-	public void deleteSession(String index)
+	public void deleteSession(@RequestBody String index)
 	{
 		int id = Integer.parseInt(index);
 		sessionRepository.deleteById((long) id);

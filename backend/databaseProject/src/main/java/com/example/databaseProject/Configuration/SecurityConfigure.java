@@ -42,7 +42,7 @@ public class SecurityConfigure {
         .addFilterBefore(new JwtTokenValidationFilter(), BasicAuthenticationFilter.class)
 		.authorizeHttpRequests((requests) -> 
 		requests.requestMatchers("/register","/error","/idDuplicate").permitAll()
-				.requestMatchers("/updateCourse","/deleteCourse","/updateSession","/csv","/adminCourse/*","/adminCourse").hasRole("ADMIN")
+				.requestMatchers("/updateCourse","/deleteCourse","/updateSession","/csv","/adminCourse/*","/adminCourse","/deleteSession").hasRole("ADMIN")
 				.requestMatchers("/basicOauth","/myTable","/updateName","/deleteTable","/course",
 				"/caculate","/SetCondition","/table","/exit","/courseSearch","/storeMyTimeTable").hasAnyRole("ADMIN","USER"));
 		http.formLogin(withDefaults());

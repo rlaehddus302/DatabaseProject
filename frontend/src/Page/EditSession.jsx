@@ -72,8 +72,8 @@ export default function EditSession()
         }
     }
     async function sendUpdated()
-    {
-        console.log(session)
+    {   
+        let copySession = session
         let data = JSON.stringify(session);
         let response = await fetch('http://localhost:8080/updateSession',{
             credentials: "include",
@@ -89,15 +89,15 @@ export default function EditSession()
             const modal = window.bootstrap.Modal.getInstance(modalRef.current);            
             if (modal) 
                 modal.hide();
-            setCourseList((prevStat) => {
-                let copy = prevStat.map((course,index)=>{
-                    if(index === sendCourse.id - 1)
+            setSessionList((prevStat) => {
+                let copy = prevStat.map((session)=>{
+                    if( session.id === copySession.id)
                     {
-                        return {...course,...sendCourse};
+                        return {...session,...copySession};
                     }
                     else
                     {
-                        return course
+                        return session
                     }
                 })
                 console.log(copy);
@@ -121,7 +121,7 @@ export default function EditSession()
         })
         if(response.ok)
         {
-            setCourseList((prevStat)=>{
+            setSessionList((prevStat)=>{
                 return prevStat.filter((element)=>{
                     return element.id != index
                 })

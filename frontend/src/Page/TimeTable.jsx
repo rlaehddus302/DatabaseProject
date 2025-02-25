@@ -43,6 +43,9 @@ export default function TimeTalbe()
             {
                 response = await fetch('http://localhost:8080/table',{
                     credentials: "include",
+                    headers:{
+                        'Authorization': localStorage.getItem("jwt"),
+                    }
                 })
                 const resData = await response.json()
                 console.log(response)

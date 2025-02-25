@@ -1,9 +1,8 @@
 import { useMemo, useState } from "react"
 
-export default function Search({handleSelect})
+export default function Search({handleSelect, academicTerm})
 {
     const [resData,setResData] = useState([])
-
 
     const debouncedSearch = useMemo(() => {
         let timeoutId;
@@ -11,7 +10,7 @@ export default function Search({handleSelect})
             clearTimeout(timeoutId); 
             timeoutId = setTimeout(async () => {
                 console.log(query);
-                const response = await fetch('http://localhost:8080/courseSearch', {
+                const response = await fetch(`http://localhost:8080/courseSearch?year=${academicTerm.academic_year}&semester=${academicTerm.semester}`, {
                     method: 'POST',
                     credentials: "include",
                     body: JSON.stringify(query),
@@ -25,7 +24,7 @@ export default function Search({handleSelect})
                 setResData(temp);
             }, 100); 
         };
-    }, []);
+    }, [academicTerm]);
 
     function handleInputChange(event) {
         debouncedSearch(event.target.value); 
@@ -35,7 +34,7 @@ export default function Search({handleSelect})
     {
         handleSelect((prevState) => {
                 const copy = [...prevState]
-                copy.push({"name" : value.name, "courseCode" : {"code" : value.courseCode.code}, "credit" : value.credit})
+                copy.push({"name" : value.name, "courseCode" : {"code" : value.code}, "credit" : value.credit})
                 console.log(copy)
                 console.log("완료")
                 return copy
@@ -62,7 +61,7 @@ export default function Search({handleSelect})
                                     return(
                                         <button type="button" className="my-1 btn btn-light w-100" style={{backgroundColor:'white',}}  onClick={() => handleClick(value)}>
                                             <div className="p-2 d-flex align-items-center">
-                                                <p className="m-0 fs-6">{value.name}({value.courseCode.code})</p>
+                                                <p className="m-0 fs-6">{value.name}({value.code})</p>
                                                 <p className="m-0 ms-auto fs-6">{value.credit}학점</p>
                                             </div>
                                         </button>
